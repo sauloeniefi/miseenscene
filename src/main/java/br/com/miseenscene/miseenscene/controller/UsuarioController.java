@@ -76,11 +76,11 @@ public class UsuarioController {
     }
 
     @PutMapping("put-descricao/{id}")
-    public ResponseEntity<Usuario> putProfileDescricao(@PathVariable("id") Long idUsuario, @RequestBody Usuario descricao) throws IOException {
+    public ResponseEntity<Usuario> putProfileDescricao(@PathVariable("id") Long idUsuario, @RequestBody String descricao) {
 
         if (usuarioRepository.existsById(idUsuario)) {
             Usuario usuarioAtualizado = usuarioRepository.getById(idUsuario);
-            usuarioAtualizado.setDescricao(descricao.getDescricao());
+            usuarioAtualizado.setDescricao(descricao);
 
             usuarioRepository.save(usuarioAtualizado);
             return ResponseEntity.created(null).body(usuarioAtualizado);
