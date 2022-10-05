@@ -34,11 +34,11 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Usuario> getById(@PathVariable("id") Long idUsuario) {
+    @GetMapping("{email}")
+    public ResponseEntity<Usuario> getByEmail(@PathVariable("email") String emailUsuario) {
 
-        if (usuarioRepository.existsById(idUsuario)) {
-            Usuario usuario = usuarioRepository.getById(idUsuario);
+        if (usuarioRepository.existsUsuarioByEmail(emailUsuario)) {
+            Usuario usuario = usuarioRepository.getUsuarioByEmail(emailUsuario);
             usuario.setSenha(UUID.randomUUID().toString());
 
             return ResponseEntity.ok(usuario);
