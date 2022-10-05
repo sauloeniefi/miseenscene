@@ -14,7 +14,7 @@ public class SpringFoxConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("br.com.miseenscene.miseenscene.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
