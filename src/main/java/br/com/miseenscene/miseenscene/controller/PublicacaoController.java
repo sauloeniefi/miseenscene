@@ -2,8 +2,9 @@ package br.com.miseenscene.miseenscene.controller;
 
 import br.com.miseenscene.miseenscene.dto.PublicacaoDTO;
 import br.com.miseenscene.miseenscene.model.Publicacao;
+import br.com.miseenscene.miseenscene.model.Usuario;
 import br.com.miseenscene.miseenscene.repository.PublicacaoRepository;
-import br.com.miseenscene.miseenscene.service.PublicacaoService;
+import br.com.miseenscene.miseenscene.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class PublicacaoController {
     private PublicacaoRepository publicacaoRepository;
 
     @Autowired
-    private PublicacaoService publicacaoService;
+    private UsuarioRepository usuarioRepository;
 
 
     @GetMapping
@@ -49,31 +50,25 @@ public class PublicacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<Publicacao> savePublicacao(@RequestBody Publicacao publicacao) {
+    public ResponseEntity<Publicacao> savePublicacao(@RequestParam(name = "usuario") String emailUsuario,
+                                                     @RequestParam(name = "titulo") String titulo,
+                                                     @RequestParam(name = "descricao") String descricao,
+                                                     @RequestParam("image") MultipartFile image) throws IOException {
 
-        if (publicacao.getUsuario() == null) {
-            return ResponseEntity.unprocessableEntity().build();
-        } else {
-            publicacao.setDhInclusao(LocalDateTime.now());
+        Publicacao novaPublicacao = new Publicacao();
+        Usuario usuario = usuarioRepository.getUsuarioByEmail(emailUsuario);
+        novaPublicacao.setUsuario(usuario);
+        novaPublicacao.setTitulo(titulo);
+        novaPublicacao.setDescricao(descricao);
+        novaPublicacao.setImagem(image.getBytes());
+        novaPublicacao.setDhInclusao(LocalDateTime.now());
 
-            publicacaoRepository.save(publicacao);
-            return ResponseEntity.created(null).body(publicacao);
+        try {
+            publicacaoRepository.save(novaPublicacao);
+            return ResponseEntity.created(null).body(novaPublicacao);
+        } catch (Exception e) {
+            return ResponseEntity.unprocessableEntity().body(novaPublicacao);
         }
-    }
 
-    @PutMapping("put-image/{id}")
-    public ResponseEntity<PublicacaoDTO> putImagePublicacao(@PathVariable("id") Long idPublicacao, @RequestParam("image") MultipartFile image) throws IOException {
-
-        if (publicacaoRepository.existsById(idPublicacao)) {
-            publicacaoService.savePicturePublicacao(idPublicacao, image);
-
-            Publicacao publicacao = publicacaoRepository.getById(idPublicacao);
-            PublicacaoDTO publicacaoDTO = new PublicacaoDTO(publicacao.getIdPublicacao(), publicacao.getTitulo(), publicacao.getDescricao(),
-                    publicacao.getDhInclusao(), publicacao.getImagem(), publicacao.getUsuario(), publicacao.getComentarios());
-
-            return ResponseEntity.created(null).body(publicacaoDTO);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 }
