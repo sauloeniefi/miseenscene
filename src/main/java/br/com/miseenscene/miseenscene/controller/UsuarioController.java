@@ -65,11 +65,12 @@ public class UsuarioController {
     }
 
     @PutMapping("put-profile/{id}")
-    public ResponseEntity<Boolean> putProfileImage(@PathVariable("id") Long idUsuario, @RequestParam("image") MultipartFile image) throws IOException {
+    public ResponseEntity<Usuario> putProfileImage(@PathVariable("id") Long idUsuario, @RequestParam("image") MultipartFile image) throws IOException {
 
         if (usuarioRepository.existsById(idUsuario)) {
+            Usuario usuarioEncontrado = usuarioRepository.getById(idUsuario);
             usuarioService.saveProfilePicture(idUsuario, image);
-            return ResponseEntity.created(null).body(true);
+            return ResponseEntity.created(null).body(usuarioEncontrado);
         } else {
             return ResponseEntity.notFound().build();
         }
