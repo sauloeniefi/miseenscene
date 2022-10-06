@@ -48,6 +48,20 @@ public class UsuarioController {
 
     }
 
+    @PostMapping("logar/")
+    public ResponseEntity<Usuario> logar(@RequestBody Usuario usuario) {
+        if (usuarioRepository.existsUsuarioByEmail(usuario.getEmail())) {
+            Usuario usuarioVerificador = usuarioRepository.getUsuarioByEmail(usuario.getEmail());
+            if (usuarioVerificador.getSenha().equals(usuario.getSenha())) {
+                return ResponseEntity.ok(usuarioVerificador);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Usuario> save(@RequestBody Usuario usuario) {
 
