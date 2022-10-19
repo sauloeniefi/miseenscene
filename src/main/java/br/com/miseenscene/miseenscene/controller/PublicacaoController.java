@@ -53,7 +53,7 @@ public class PublicacaoController {
     public ResponseEntity<Publicacao> savePublicacao(@RequestParam(name = "usuario") String emailUsuario,
                                                      @RequestParam(name = "titulo") String titulo,
                                                      @RequestParam(name = "descricao") String descricao,
-                                                     @RequestParam("image") MultipartFile image) throws IOException {
+                                                     @RequestPart("image") MultipartFile image) throws IOException {
 
         Publicacao novaPublicacao = new Publicacao();
         Usuario usuario = usuarioRepository.getUsuarioByEmail(emailUsuario);
