@@ -50,7 +50,7 @@ public class PublicacaoController {
     }
 
     @PostMapping("{usuario}/{titulo}/{descricao}")
-    public ResponseEntity<Publicacao> savePublicacao(@PathVariable("id") String emailUsuario,
+    public ResponseEntity<Publicacao> savePublicacao(@PathVariable("usuario") String emailUsuario,
                                                      @PathVariable("titulo") String titulo,
                                                      @PathVariable("descricao") String descricao,
                                                      @RequestParam("image") MultipartFile image) throws IOException {
