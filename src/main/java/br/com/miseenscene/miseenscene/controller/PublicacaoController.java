@@ -49,11 +49,11 @@ public class PublicacaoController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Publicacao> savePublicacao(@RequestParam(name = "usuario") String emailUsuario,
-                                                     @RequestParam(name = "titulo") String titulo,
-                                                     @RequestParam(name = "descricao") String descricao,
-                                                     @RequestPart("image") MultipartFile image) throws IOException {
+    @PostMapping("{usuario}/{titulo}/{descricao}")
+    public ResponseEntity<Publicacao> savePublicacao(@PathVariable("id") String emailUsuario,
+                                                     @PathVariable("titulo") String titulo,
+                                                     @PathVariable("descricao") String descricao,
+                                                     @RequestParamg("image") MultipartFile image) throws IOException {
 
         Publicacao novaPublicacao = new Publicacao();
         Usuario usuario = usuarioRepository.getUsuarioByEmail(emailUsuario);
