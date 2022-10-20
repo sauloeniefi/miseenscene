@@ -6,6 +6,7 @@ import br.com.miseenscene.miseenscene.model.Usuario;
 import br.com.miseenscene.miseenscene.repository.PublicacaoRepository;
 import br.com.miseenscene.miseenscene.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,6 +69,22 @@ public class PublicacaoController {
             return ResponseEntity.created(null).body(novaPublicacao);
         } catch (Exception e) {
             return ResponseEntity.unprocessableEntity().body(novaPublicacao);
+        }
+
+    }
+
+    @GetMapping("list-by-user")
+    public ResponseEntity<List<Publicacao>> listPublicacoesByUsuario(@RequestParam("email") String emailUsuario) {
+        try {
+            Usuario usuario = usuarioRepository.getUsuarioByEmail(emailUsuario);
+            List<Publicacao> listaPublicacoes = publicacaoRepository.getPublicacaosByUsuario(usuario);
+            if (listaPublicacoes.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.ok(listaPublicacoes);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
         }
 
     }
