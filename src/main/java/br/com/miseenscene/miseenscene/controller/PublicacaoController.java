@@ -73,6 +73,8 @@ public class PublicacaoController {
 
     }
 
+    //TODO: Remove this comment after
+
     @GetMapping("list-by-user")
     public ResponseEntity<List<Publicacao>> listPublicacoesByUsuario(@RequestParam("email") String emailUsuario) {
         try {
