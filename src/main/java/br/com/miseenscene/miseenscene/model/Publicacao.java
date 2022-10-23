@@ -36,6 +36,4 @@ public class Publicacao {
     @JoinColumn(name = "ID_USUARIO", nullable = false, foreignKey = @ForeignKey(name = "ID_USUARIO"))
     private Usuario usuario;
 
-    @OneToMany
-    private List<Comentario> comentarios = new ArrayList<>();
 }

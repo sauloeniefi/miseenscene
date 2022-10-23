@@ -1,6 +1,5 @@
 package br.com.miseenscene.miseenscene.dto;
 
-import br.com.miseenscene.miseenscene.model.Comentario;
 import br.com.miseenscene.miseenscene.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +17,5 @@ public class PublicacaoDTO {
     private LocalDateTime dhInclusao;
     private byte[] imagem;
     private Usuario usuario;
-    private List<Comentario> comentarios;
 
 }

@@ -37,10 +37,6 @@ public class Usuario {
 
     private byte[] profile;
 
-    @OneToMany
-    @JsonIgnore
-    private List<Comentario> comentarioList;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,6 +1,8 @@
 package br.com.miseenscene.miseenscene.controller;
 
+import br.com.miseenscene.miseenscene.model.Seguidor;
 import br.com.miseenscene.miseenscene.model.Usuario;
+import br.com.miseenscene.miseenscene.repository.SeguidorRepository;
 import br.com.miseenscene.miseenscene.repository.UsuarioRepository;
 import br.com.miseenscene.miseenscene.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private SeguidorRepository seguidorRepository;
 
 
     @GetMapping
@@ -102,6 +107,28 @@ public class UsuarioController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/seguir")
+    public ResponseEntity<Seguidor> seguir(@RequestParam("seguidor") String email,
+                                 @RequestParam("artista") String emailArtista){
+        try {
+            if (usuarioRepository.existsUsuarioByEmail(email)) {
+                Seguidor seguidores = new Seguidor();
+
+                Usuario seguidor = usuarioRepository.getUsuarioByEmail(email);
+                Usuario artista = usuarioRepository.getUsuarioByEmail(emailArtista);
+
+                seguidores.setIdUsuarioSeguidor(seguidor.getIdUsuario());
+                seguidores.setIdUsuario(artista.getIdUsuario());
+                seguidorRepository.save(seguidores);
+                return ResponseEntity.created(null).body(seguidores);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }

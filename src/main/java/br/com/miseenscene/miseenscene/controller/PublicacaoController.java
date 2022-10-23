@@ -6,7 +6,6 @@ import br.com.miseenscene.miseenscene.model.Usuario;
 import br.com.miseenscene.miseenscene.repository.PublicacaoRepository;
 import br.com.miseenscene.miseenscene.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +38,7 @@ public class PublicacaoController {
             for (Publicacao publicacao : listPublicacao) {
                 PublicacaoDTO publicacaoDTO = new PublicacaoDTO(publicacao.getIdPublicacao(),
                         publicacao.getTitulo(), publicacao.getDescricao(), publicacao.getDhInclusao(), publicacao.getImagem(),
-                        publicacao.getUsuario(), publicacao.getComentarios());
+                        publicacao.getUsuario());
 
                 publicacaoDTO.getUsuario().setSenha(UUID.randomUUID().toString());
 
@@ -73,8 +72,6 @@ public class PublicacaoController {
 
     }
 
-    //TODO: Run deploy
-
     @GetMapping("list-by-user")
     public ResponseEntity<List<Publicacao>> listPublicacoesByUsuario(@RequestParam("email") String emailUsuario) {
         try {
@@ -89,5 +86,24 @@ public class PublicacaoController {
             return ResponseEntity.internalServerError().body(null);
         }
 
+    }
+
+    @GetMapping("seguindo")
+    public ResponseEntity<List<Publicacao>> listPublicacoesSeguindo(@RequestParam("email") String emailUsuario) {
+        try {
+            if (usuarioRepository.existsUsuarioByEmail(emailUsuario)) {
+                Usuario usuario = usuarioRepository.getUsuarioByEmail(emailUsuario);
+                List<Publicacao> listPublicacoes = publicacaoRepository.findPublicacaosByUsuarioAndSeguidores(usuario.getIdUsuario());
+                if (listPublicacoes.isEmpty()) {
+                    return ResponseEntity.noContent().build();
+                } else {
+                    return ResponseEntity.ok(listPublicacoes);
+                }
+            } else {
+                return ResponseEntity.unprocessableEntity().body(null);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
     }
 }
