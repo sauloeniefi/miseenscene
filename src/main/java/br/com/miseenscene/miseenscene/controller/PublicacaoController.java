@@ -30,10 +30,10 @@ public class PublicacaoController {
     @GetMapping
     public ResponseEntity<List<PublicacaoDTO>> listAll() {
 
-        if (publicacaoRepository.findAll().isEmpty()) {
+        if (publicacaoRepository.findAllByOrderByDhInclusaoDesc().isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {
-            List<Publicacao> listPublicacao = publicacaoRepository.findAll();
+            List<Publicacao> listPublicacao = publicacaoRepository.findAllByOrderByDhInclusaoDesc();
             List<PublicacaoDTO> publicacaoDTOList = new ArrayList<>();
             for (Publicacao publicacao : listPublicacao) {
                 PublicacaoDTO publicacaoDTO = new PublicacaoDTO(publicacao.getIdPublicacao(),
