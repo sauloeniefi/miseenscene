@@ -93,7 +93,7 @@ public class PublicacaoController {
         try {
             if (usuarioRepository.existsUsuarioByEmail(emailUsuario)) {
                 Usuario usuario = usuarioRepository.getUsuarioByEmail(emailUsuario);
-                List<Publicacao> listPublicacoes = publicacaoRepository.findPublicacaosByUsuarioAndSeguidores(usuario.getIdUsuario());
+                List<Publicacao> listPublicacoes = publicacaoRepository.findPublicacaosByUsuarioAndSeguidoresOrderByDhInclusaoDesc(usuario.getIdUsuario());
                 if (listPublicacoes.isEmpty()) {
                     return ResponseEntity.noContent().build();
                 } else {
